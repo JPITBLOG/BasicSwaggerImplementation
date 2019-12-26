@@ -1,0 +1,26 @@
+Index: services/admin.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- services/admin.js	(date 1576760731320)
++++ services/admin.js	(date 1576760731320)
+@@ -257,6 +257,7 @@
+             markAsRead:false
+         };
+         if(trainyId !== null){
++            console.log("got the service: ")
+             TraineeDocumentationModel.getTraineeMarkedDocument({documentation,trainyId},(error,responseData) => {
+                 if(responseData || error) {
+                     TopicModel.findTopicName(currentDocument.topic,(error,response) => {
+@@ -273,8 +274,10 @@
+             })
+         }
+         else {
++            console.log("got the service in service : ")
+             TopicModel.findTopicName(currentDocument.topic,(error,topic) => {
+                 if(topic){
++                    console.log("error found like: "+topic);
+                     currentDocument.technology = technologyName;
+                     currentDocument.topic = topic;
+                     newDocumentMapped.push(currentDocument)

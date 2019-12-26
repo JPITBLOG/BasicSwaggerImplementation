@@ -1,0 +1,637 @@
+---
+swagger: "2.0"
+info:
+  description: "Student Service API"
+  version: "1.0.0"
+  title: "Student"
+  termsOfService: ""
+  contact:
+    name: "someName"
+    url: "http://www.staffshift.com"
+    email: "info@staffshift.com"
+host: "localhost:3000"
+basePath: "/"
+tags:
+  - name: "WebForBeginner"
+    description: "Trainee related service"
+schemes:
+  - "http"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+paths:
+  /student:
+    parameters:
+      - $ref: "#/parameters/x-request-jwt"
+    post:
+      tags:
+        - Student
+      summary: "created a new student"
+      x-swagger-router-controller: Student
+      operationId: createStudent
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: student
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/student_payload"
+      responses:
+        201:
+          description: "A single student will be returned"
+          schema:
+            $ref: "#/definitions/student"
+        400:
+          $ref: "#/responses/student_validation_error"
+        401:
+          $ref: "#/responses/unauthorize_error_model"
+        default:
+          $ref: "#/responses/default_server_error"
+    get:
+      tags:
+        - Student
+      summary: "Retrieves all student"
+      x-swagger-router-controller: Student
+      operationId: getStudents
+      responses:
+        200:
+          description: "All students will be returned"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/student_response"
+        204:
+          $ref: "#/responses/no_content"
+        400:
+          description: "Validation errors caused by missing or invalid header / path or payloads"
+          schema:
+            $ref: "#/definitions/get_delete_student_error"
+        401:
+          $ref: "#/responses/unauthorize_error_model"
+        default:
+          $ref: "#/responses/default_server_error"
+  /student/{student_id}:
+    parameters:
+      - $ref: "#/parameters/x-request-jwt"
+      - $ref: "#/parameters/student_id"
+    get:
+      tags:
+        - Student
+      summary: "Retrieves a single student"
+      x-swagger-router-controller: Student
+      operationId: getStudent
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "A single student will be returned"
+          schema:
+            $ref: "#/definitions/student"
+        400:
+          $ref: "#/responses/pattern_validation_error"
+        404:
+          $ref: "#/responses/resource_not_found"
+        409:
+          $ref: "#/responses/conflict_error"
+        default:
+          $ref: "#/responses/default_server_error"
+  /admin/register:
+    post:
+      tags:
+        - Admin
+      summary: "create new admin"
+      x-swagger-router-controller: admin-swagger
+      operationId: createAdminRegister
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: registerPayload
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/admin_payload"
+      responses:
+        201:
+          description: "A single admin is created"
+          schema:
+            $ref: "#/definitions/admin"
+        400:
+          $ref: "#/responses/student_validation_error"
+        default:
+          $ref: "#/responses/default_server_error"
+  /admin/register/{register_id}:
+    get:
+      parameters:
+        - name: register_id
+          in: path
+          required: true
+          type: string
+      tags:
+        - Admin
+      summary: "create new admin"
+      x-swagger-router-controller: admin-swagger
+      operationId: getAdminRegister
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "A single admin is retrieved"
+          schema:
+            $ref: "#/definitions/admin"
+        400:
+          $ref: "#/responses/student_validation_error"
+        default:
+          $ref: "#/responses/default_server_error"
+  /admin/login:
+    post:
+      tags:
+        - Admin
+      parameters:
+        - name: loginPayload
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/admin_login_payload"
+      summary: "admin login"
+      x-swagger-router-controller: admin-swagger
+      operationId: adminLogin
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "An admin is Logged in"
+          schema:
+            $ref: "#/definitions/admin"
+        404:
+          $ref: "#/responses/admin_credentials_error"
+        default:
+          $ref: "#/responses/default_server_error"
+  /admin/technology/add-technology:
+    post:
+      tags:
+        - Admin
+      parameters:
+        - name: technologyPayload
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/technology_payload"
+      summary: "add Technology"
+      x-swagger-router-controller: admin-swagger
+      operationId: addTechnology
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        201:
+          description: "Technology is added"
+          schema:
+            $ref: "#/definitions/technology_response_payload"
+        400:
+          $ref: "#/responses/technology_error"
+        default:
+          $ref: "#/responses/default_server_error"
+  /admin/technology/get-technology:
+    get:
+      tags:
+        - Admin
+      summary: "get technology"
+      x-swagger-router-controller: admin-swagger
+      operationId: getAllTechnology
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "return all technology"
+          schema:
+            $ref: "#/definitions/allTechnology_payload"
+        400:
+          $ref: "#/responses/admin_credentials_error"
+        default:
+          $ref: "#/responses/default_server_error"
+  /admin/technology/delete-technology/{technology_id}:
+    delete:
+      parameters:
+        - name: technology_id
+          in: path
+          required: true
+          type: string
+      tags:
+        - Admin
+      summary: "delete technology"
+      x-swagger-router-controller: admin-swagger
+      operationId: deleteTechnology
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "technology is deleted"
+          schema:
+            $ref: "#/definitions/deleteTechnology_response"
+        404:
+          $ref: "#/responses/admin_credentials_error"
+        default:
+          $ref: "#/responses/default_server_error"
+  /admin/topic/add-topic:
+    post:
+      tags:
+        - Admin
+      parameters:
+        - name: topicPayload
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/topic_payload"
+      summary: "add Topic"
+      x-swagger-router-controller: admin-swagger
+      operationId: addTopic
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        201:
+          description: "Topic is added"
+          schema:
+            $ref: "#/definitions/topic_response_payload"
+        400:
+          $ref: "#/responses/topic_error"
+        default:
+          $ref: "#/responses/default_server_error"
+  /admin/topic/get-topic:
+    get:
+      tags:
+        - Admin
+      summary: "get All Topic"
+      x-swagger-router-controller: admin-swagger
+      operationId: getAllTopic
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "return all topic"
+          schema:
+            $ref: "#/definitions/allTopic_payload"
+        400:
+          $ref: "#/responses/topic_error"
+        default:
+          $ref: "#/responses/default_server_error"
+  /admin/document/add-document:
+    post:
+      tags:
+        - Admin
+      x-swagger-router-controller: admin-swagger
+      operationId: addDocument
+      summary: "add documentation"
+      consumes:
+        - multipart/form-data
+      produces:
+        - application/json
+      parameters:
+        - in: formData
+          name: technology
+          required: true
+          type: string
+        - in: formData
+          name: topic
+          required: true
+          type: string
+        - in: formData
+          name: selectedDocument
+          required: false
+          type: file
+        - in: formData
+          name: selectedLink
+          required: false
+          type: string
+      responses:
+        201:
+          description: "document is added"
+          schema:
+            $ref: "#/definitions/document_response_payload"
+parameters:
+  student_id:
+    name: student_id
+    required: true
+    in: path
+    type: string
+    pattern:  ^[0-9a-fA-F]{24}$
+  x-request-jwt:
+    name: x-request-jwt
+    in: header
+    description: "The jwt header"
+    type: string
+    required: true
+definitions:
+  student_response:
+    allOf:
+      - $ref: "#/definitions/student"
+  student:
+    type: object
+    required:
+      - _id
+      - __v
+      - created_at
+      - updated_at
+      - name
+      - age
+      - address
+    properties:
+      name:
+        type: string
+      age:
+        type: integer
+      address:
+        type: string
+      _id:
+        type: string
+        pattern: ^[0-9a-fA-F]{24}$
+      __v:
+        type: integer
+      created_at:
+        type: string
+        format: date-time
+      updated_at:
+        type: string
+        format: date-time
+  student_payload:
+    type: object
+    required:
+      - name
+      - age
+      - address
+    properties:
+      name:
+        type: string
+      age:
+        type: integer
+      address:
+        type: string
+  get_delete_student_error:
+    type: object
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: string
+        enum:
+          - REQUIRED
+          - PATTERN
+      message:
+        type: string
+  unauthorize_error_model:
+    type: "object"
+    required:
+      - "code"
+      - "message"
+    properties:
+      code:
+        type: "string"
+        enum:
+          - UNAUTHORIZED
+      message:
+        type: "string"
+  conflict_error:
+    type: object
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: string
+        enum:
+          - CONFLICT_ERROR
+      message:
+        type: string
+  client_error_model:
+    type: object
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  server_error_model:
+    type: object
+    required:
+      - message
+    properties:
+      message:
+        type: string
+      exception:
+        $ref: "#/definitions/exception_model"
+  exception_model:
+    type: object
+  pattern_validation_error_model:
+    type: object
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+  common_validation_error:
+    type: object
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: string
+        enum:
+          - PATTERN
+          - REQUIRED
+          - MIN_LENGTH
+          - DATA_EXIST
+          - DATA_NOT_EXIST
+      message:
+        type: string
+  admin_payload:
+    type: object
+    required:
+      - name
+      - emailId
+      - password
+    properties:
+      name:
+        type: string
+        minLength: 3
+      emailId:
+        type: string
+        default: abc@gmail.com
+        pattern: ^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$
+      password:
+        type: string
+        minLength: 3
+  admin_login_payload:
+    type: object
+    required:
+      - emailId
+      - password
+    properties:
+      emailId:
+        type: string
+        default: abc@gmail.com
+        pattern: ^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$
+      password:
+        type: string
+        minLength: 8
+  mongoose_default:
+    type: object
+    required:
+      - _id
+      - __v
+    properties:
+      _id:
+        type: object
+        pattern: ^[0-9a-fA-F]{24}$
+      __v:
+        type: number
+  token_response:
+    type: object
+    required:
+      - token
+    properties:
+      token:
+        type: string
+  admin:
+    allOf:
+      - $ref: "#/definitions/admin_payload"
+      - $ref: "#/definitions/mongoose_default"
+      - $ref: "#/definitions/token_response"
+  technology_payload:
+    type: object
+    required:
+      - technology
+      - hours
+    properties:
+      technology:
+        type: string
+        default: node js
+        minLength: 5
+      hours:
+        type: number
+        minLength: 2
+  technology_response_payload:
+    allOf:
+      - $ref: "#/definitions/technology_payload"
+      - $ref: "#/definitions/mongoose_default"
+  allTechnology_payload:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          - $ref: "#/definitions/technology_response_payload"
+  deleteTechnology_response:
+    type: object
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  topic_payload:
+    type: object
+    required:
+      - technology
+      - topic
+    properties:
+      technology:
+        type: string
+        minLength: 3
+      topic:
+        type: string
+        default: node js syntax
+        minLength: 5
+  topic_response_payload:
+    allOf:
+      - $ref: "#/definitions/topic_payload"
+      - $ref: "#/definitions/mongoose_default"
+  allTopic_payload:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          - $ref: "#/definitions/topic_response_payload"
+  document_payload:
+    type: object
+    required:
+      - technology
+      - topic
+      - selectedDocument
+    properties:
+      technology:
+        type: string
+      topic:
+        type: string
+      selectedDocument:
+        type: object
+  document_response_payload:
+    allOf:
+      - $ref: "#/definitions/document_payload"
+      - $ref: "#/definitions/mongoose_default"
+responses:
+  no_content:
+    description: "No Content. There were no records to return based on your query."
+  default_server_error:
+    description: "unexpected error"
+    schema:
+      $ref: "#/definitions/server_error_model"
+  resource_not_found:
+    description: "No resource found for ID"
+    schema:
+      $ref: "#/definitions/client_error_model"
+  conflict_error:
+    description: "Already exists"
+    schema:
+      $ref: "#/definitions/conflict_error"
+  pattern_validation_error:
+    description: "A validation error occurred"
+    schema:
+      $ref: "#/definitions/pattern_validation_error_model"
+  unauthorize_error_model:
+    description: "Failed to authenticate the user making the request"
+    schema:
+      $ref: "#/definitions/unauthorize_error_model"
+  admin_credentials_error:
+    description: "error on create student"
+    schema:
+      $ref: "#/definitions/common_validation_error"
+  student_validation_error:
+    description: "An error occured while verify data"
+    schema:
+      $ref: "#/definitions/common_validation_error"
+  technology_error:
+    description: "error on create technology"
+    schema:
+      $ref: "#/definitions/common_validation_error"
+  topic_error:
+    description: "error on create topic"
+    schema:
+      $ref: "#/definitions/common_validation_error"
+  document_error:
+    description: "error while adding document"
+    schema:
+      $ref: "#/definitions/common_validation_error"

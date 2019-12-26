@@ -1,0 +1,9 @@
+{
+  "mongo": {
+    "host": "mongodb://localhost:27017/webforbeginner",
+    "options": {
+      "useNewUrlParser": true,
+      "useUnifiedTopology": true
+    }
+  }
+}
